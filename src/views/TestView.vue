@@ -79,8 +79,4 @@ const examples = [
 
 const exampleId = ref<number | null>(null);
 const result = ref();
-
-function callExample(exampleId: number) {
-  examples[exampleId]().catch((err) => (result.value = err));
-}
 </script>
