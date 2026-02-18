@@ -61,26 +61,26 @@
 </template>
 
 <script setup lang="ts">
-import { Backend } from '@/main'
-import { ref } from 'vue'
+import { Backend } from "@/main";
+import { ref } from "vue";
 
 const examples = [
-  () => Backend.userLogin('pk', '123#Asd').then((r) => (result.value = r)),
+  () => Backend.userLogin("pk", "123#Asd").then((r) => (result.value = r)),
   () =>
     Backend.courseTeacherSessionsGet({ pageNumber: 1, pageSize: 99999 }).then(
       (r) => (result.value = r),
     ),
-  () => Backend.userLogin('stu14858', '14858').then((r) => (result.value = r)),
+  () => Backend.userLogin("stu15236", "15236").then((r) => (result.value = r)),
   () =>
     Backend.courseStudentSessionsGet({ pageNumber: 1, pageSize: 99999 }).then(
       (r) => (result.value = r),
     ),
-]
+];
 
-const exampleId = ref<number | null>(null)
-const result = ref()
+const exampleId = ref<number | null>(null);
+const result = ref();
 
 function callExample(exampleId: number) {
-  examples[exampleId]().catch((err) => (result.value = err))
+  examples[exampleId]().catch((err) => (result.value = err));
 }
 </script>
