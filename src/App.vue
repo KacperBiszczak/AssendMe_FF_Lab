@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
-  <header>
+  <!-- <header>
     AttendMe - backend client demo.
     <nav>
       <RouterLink to="/">Test page</RouterLink>
       <RouterLink to="/about">About</RouterLink>
     </nav>
-  </header>
+  </header> -->
 
   <RouterView />
 </template>
