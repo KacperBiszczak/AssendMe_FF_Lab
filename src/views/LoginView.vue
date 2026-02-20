@@ -21,8 +21,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
-// Importujesz wygenerowaną bibliotekę (zgodnie z instrukcją z obrazka)
-import { Backend } from "@/main"; // Upewnij się, że ścieżka jest poprawna
+import { Backend } from "@/main";
 
 const router = useRouter();
 const loading = ref(false);
@@ -43,8 +42,7 @@ const handleLogin = async () => {
     const user = await Backend.userGet(undefined);
 
     console.log("Zalogowany użytkownik:", user);
-    // 3. Przekierowanie na podstawie roli
-    // Zakładamy, że user.role to 'Teacher' lub 'Student' (sprawdź w Swaggerze)
+    // Przekierowanie na podstawie roli
     if (user.isTeacher === true) {
       router.push("/teacher/dashboard");
     } else if (user.isStudent === true) {
