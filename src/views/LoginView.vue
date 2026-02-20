@@ -7,23 +7,29 @@
       <option :value="'student'">STUDENT</option>
     </select>
 
-    <div v-if="loginType == 'wykladowca'">
-      <input type="text" v-model="teacherLogin" placeholder="Login wykładowcy" />
-      <input type="password" v-model="teacherPassword" placeholder="Hasło wykładowcy" />
-    </div>
-
-    <div v-else-if="loginType == 'student'">
-      <label for="studentLogin">Login studenta:</label>
-      <input type="text" v-model="studentLogin" placeholder="Login studenta" id="studentLogin" />
-
-      <label for="studentPassword">Hasło studenta:</label>
+    <div v-if="loginType === 'teacher'" style="margin-top: 1rem">
       <input
-        type="password"
-        v-model="studentPassword"
-        placeholder="Hasło studenta"
-        id="studentPassword"
+        v-model="teacherLogin"
+        type="text"
+        placeholder="Login"
+        style="display: block; margin-bottom: 0.5rem; padding: 0.25rem"
       />
-    </div>
+      <input
+        v-model="teacherPassword"
+        type="password"
+        placeholder="Hasło"
+        style="display: block; margin-bottom: 0.5rem; padding: 0.25rem"
+      />
+      <button
+        @click="
+          result = Backend.loginTeacher(teacherLogin, teacherPassword);
+          teacherLogin = '';
+          teacherPassword = '';
+        "
+        style="padding: 0.25rem 0.5rem"
+      >
+        Zaloguj się jako wykładowca
+      </button>
   </main>
 </template>
 
