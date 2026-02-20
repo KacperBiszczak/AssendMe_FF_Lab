@@ -8,23 +8,25 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "test",
-      component: TestView,
+      redirect: "/login",
     },
     {
       path: "/login",
       name: "login",
       component: LoginView,
+      meta: { guestOnly: true },
     },
     {
       path: "/student/dashboard",
       name: "student-dashboard",
       component: StudentDashboardView,
+      meta: { requiresAuth: true, role: "Student" },
     },
     {
       path: "/teacher/dashboard",
       name: "teacher-dashboard",
       component: TeacherDashboardView,
+      meta: { requiresAuth: true, role: "Teacher" },
     },
     {
       path: "/about",

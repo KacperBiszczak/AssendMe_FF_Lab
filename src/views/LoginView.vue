@@ -42,10 +42,13 @@ const handleLogin = async () => {
     const user = await Backend.userGet(undefined);
 
     console.log("Zalogowany użytkownik:", user);
+
     // Przekierowanie na podstawie roli
     if (user.isTeacher === true) {
+      sessionStorage.setItem("userRole", "Teacher");
       router.push("/teacher/dashboard");
     } else if (user.isStudent === true) {
+      sessionStorage.setItem("userRole", "Student");
       router.push("/student/dashboard");
     } else {
       errorMessage.value = "Nieznana rola użytkownika.";
