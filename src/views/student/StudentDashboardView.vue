@@ -6,15 +6,15 @@
     </header>
 
     <main>
-      <h2>Twoje dzisiejsze zajęcia</h2>
-      
-      <SessionsList 
-        :sessions="sessions" 
-        :loading="loading" 
+      <h2 class="mb-2">Twoje zajęcia:</h2>
+
+      <SessionsList
+        :sessions="sessions"
+        :loading="loading"
         actionLabel="Zgłoś obecność"
         @action="handleAttendance"
       />
-      
+
       <p v-if="error">{{ error }}</p>
     </main>
   </div>
@@ -47,7 +47,10 @@ const handleAttendance = (id: number) => {
   router.push(`/student/attendance/${id}`);
 };
 
-const logout = () => { sessionStorage.clear(); router.push("/login"); };
+const logout = () => {
+  sessionStorage.clear();
+  router.push("/login");
+};
 
 onMounted(fetchSessions);
 </script>

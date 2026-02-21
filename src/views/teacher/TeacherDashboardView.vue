@@ -44,6 +44,7 @@ const fetchSessions = async () => {
 };
 
 const handleDetails = (id: number) => {
+  console.log("Wybrano zajęcia o ID:", id);
   router.push(`/teacher/session/${id}`);
 };
 
