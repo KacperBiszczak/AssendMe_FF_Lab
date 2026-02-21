@@ -41,7 +41,7 @@ const handleLogin = async () => {
 
     const user = await Backend.userGet(undefined);
 
-    console.log("Zalogowany użytkownik:", user);
+    // console.log("Zalogowany użytkownik:", user);
 
     // Przekierowanie na podstawie roli
     if (user.isTeacher === true) {

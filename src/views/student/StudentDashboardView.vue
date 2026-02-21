@@ -36,6 +36,7 @@ const fetchSessions = async () => {
     loading.value = true;
     const response = await Backend.courseStudentSessionsGet({ pageNumber: 1, pageSize: 100 });
     sessions.value = response.items || [];
+    console.log("Pobrane zajęcia:", sessions.value);
   } catch (err) {
     error.value = "Błąd pobierania danych.";
   } finally {

@@ -4,6 +4,8 @@ import TestView from "../views/TestView.vue";
 import StudentDashboardView from "../views/student/StudentDashboardView.vue";
 import TeacherDashboardView from "../views/teacher/TeacherDashboardView.vue";
 import TeacherSessionDetails from "../views/teacher/TeacherSessionDetails.vue";
+import StudentAttendance from "@/views/student/StudentAttendance.vue";
+import TeacherScan from "@/views/teacher/TeacherScan.vue";
 // import { routes } from "vue-router/auto-routes";
 
 const router = createRouter({
@@ -27,6 +29,12 @@ const router = createRouter({
       component: StudentDashboardView,
       meta: { requiresAuth: true, role: "Student" },
     },
+    {
+      path: "/student/attendance/:id",
+      name: "student-attendance",
+      component: StudentAttendance,
+      meta: { requiresAuth: true, role: "Student" },
+    },
 
     // Teacher routes
     {
@@ -39,6 +47,12 @@ const router = createRouter({
       path: "/teacher/session/:id",
       name: "teacher-session-details",
       component: TeacherSessionDetails,
+      meta: { requiresAuth: true, role: "Teacher" },
+    },
+    {
+      path: "/teacher/Scan/:id",
+      name: "teacher-scan",
+      component: TeacherScan,
       meta: { requiresAuth: true, role: "Teacher" },
     },
     {
