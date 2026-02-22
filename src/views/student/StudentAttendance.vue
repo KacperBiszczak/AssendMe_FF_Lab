@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
-// import QrcodeVue from "qrcode.vue";
+// import QrcodeVue from "qrcode.vue"; // Upewnij się, że biblioteka jest zainstalowana
 import { Backend } from "@/main";
 
 const route = useRoute();
@@ -44,33 +44,47 @@ const sessionId = route.params.id as string;
 
 const sessionInfo = ref<any>(null);
 const ticketToken = ref<string | undefined>("");
-const expireDate = ref<Date>(new Date());
+// const attendanceMessage = ref<string>("");
 const loading = ref(true);
 const error = ref("");
-let intervalId: any = null;
+const intervalId: any = null;
 
-// 1. Pobieranie sygnatury zajęć
+/**
+ * 1. Pobieranie sygnatury zajęć oraz informacji o obecności
+ */
 const fetchSessionDetails = async () => {
   try {
-    // Używamy ID z URL, żeby pobrać dane o konkretnych zajęciach
-    const data = await Backend.courseStudentGroupSessionsGet(Number(17));
+    // Używamy metody pobierającej zajęcia dla studenta
+    const data = await Backend.courseStudentSessionsGet({
+      pageNumber: 1,
+      pageSize: 100,
+    });
 
-    // Szukamy konkretnych zajęć w grupie
-    sessionInfo.value = data.find((s: any) => s.courseSessionId === Number(sessionId));
+    // Znajdujemy sesję o konkretnym ID z URL
+    sessionInfo.value = data.items?.find((s: any) => s.id === Number(sessionId));
   } catch (err) {
     console.error("Błąd pobierania sygnatury", err);
   }
 };
 
-// 2. Pobieranie dynamicznego biletu (QR)
+/**
+ * 2. Pobieranie dynamicznego biletu (QR)
+ * Wymaga wcześniejszej rejestracji urządzenia
+ */
 const fetchTicket = async () => {
   try {
-    console.log("Pobieranie tokenu dla sesji ID:", sessionId);
-    const result = await Backend.courseSessionAttendanceScannerTokenGet(Number(sessionId));
+    // Metoda zwracająca token (ticket) do wyświetlenia jako QR
+    const result = await Backend.userAttendanceTicketGet();
     console.log("Pobrany token:", result);
     ticketToken.value = result.token;
+
+    // Jeśli backend zwróci informację o ostatnio zarejestrowanej obecności
+    // if (result.lastAttendanceMessage) {
+    //   attendanceMessage.value = result.lastAttendanceMessage;
+    // }
   } catch (err) {
-    error.value = "Problem z połączeniem.";
+    // Jeśli urządzenie nie jest zarejestrowane, tutaj może wystąpić błąd autoryzacji
+    error.value = "Problem z pobraniem kodu. Upewnij się, że urządzenie jest zarejestrowane.";
   } finally {
     loading.value = false;
   }
@@ -82,9 +96,11 @@ const formatDate = (dateString: string) => {
 };
 
 onMounted(async () => {
-  await fetchSessionDetails(); // Najpierw pokazujemy co to za zajęcia
-  fetchTicket(); // Potem startujemy z kodem QR
-  // intervalId = setInterval(fetchTicket, 2000); // Odświeżanie co 2s
+  await fetchSessionDetails();
+  await fetchTicket();
+
+  // Kod QR musi być generowany cyklicznie co 2 sekundy
+  // intervalId = setInterval(fetchTicket, 2000);
 });
 
 onUnmounted(() => {

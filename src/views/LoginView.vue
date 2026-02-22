@@ -37,7 +37,11 @@ const handleLogin = async () => {
   errorMessage.value = "";
 
   try {
-    await Backend.userLogin(loginData.loginName, loginData.password);
+    const authResult = await Backend.userLogin(loginData.loginName, loginData.password);
+
+    if (authResult && authResult.token) {
+      localStorage.setItem("jwt_token", authResult.token);
+    }
 
     const user = await Backend.userGet(undefined);
 

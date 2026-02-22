@@ -21,6 +21,11 @@ const router = createRouter({
       component: LoginView,
       meta: { guestOnly: true },
     },
+    // {
+    //   path: "/device/registration/:token",
+    //   name: "deviceRegistration",
+    //   component: DeviceRegistration,
+    // },
 
     // Student routes
     {

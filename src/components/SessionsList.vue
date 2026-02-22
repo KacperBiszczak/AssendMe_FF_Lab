@@ -13,13 +13,13 @@
         <div class="card-body">
           <h3 class="card-title">{{ session.courseName }}</h3>
 
-          <div class="card-subtitle mb-2 text-muted">
+          <div v-if="userRole == 'Student'" class="card-subtitle mb-2 text-muted">
             Status: {{ session.attendanceStatus || "Oczekuje" }}
           </div>
 
           <ul>
-            <li>Czas: {{ formatDate(session.dateStart) }}</li>
             <li>Grupa: {{ session.courseGroupName }}</li>
+            <li>Termin: {{ formatDate(session.dateStart) }}</li>
             <li>Sala: {{ session.locationName || "Brak danych" }}</li>
           </ul>
 
@@ -33,6 +33,8 @@
 </template>
 
 <script setup lang="ts">
+const userRole = sessionStorage.getItem("userRole") || "";
+
 // Definicja właściwości wejściowych (props)
 defineProps<{
   sessions: any[];

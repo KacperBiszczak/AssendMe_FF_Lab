@@ -44,16 +44,20 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Backend } from "@/main";
+import type {
+  CourseSessionAttendanceRecord,
+  CourseSessionListItem,
+} from "@/backend/AttendMeBackendClientBase";
 
 const route = useRoute();
 const router = useRouter();
 const sessionId = route.params.id as string;
 console.log("ID sesji:", sessionId);
 
-const sessionInfo = ref<any>(null);
-const attendanceList = ref<any[]>([]);
+const sessionInfo = ref<CourseSessionListItem | null>(null);
+const attendanceList = ref<CourseSessionAttendanceRecord[]>([]);
 const loading = ref(true);
-let refreshInterval: any = null;
+let refreshInterval: number | null = null;
 console.log(attendanceList);
 // 1. Pobieranie danych o samej sesji (szczegóły)
 const fetchSessionInfo = async () => {
@@ -68,7 +72,7 @@ const fetchSessionInfo = async () => {
 // 2. Pobieranie listy obecności
 const fetchAttendance = async () => {
   try {
-    // Metoda z obrazka nr 4 w dokumentacji
+    // Metoda w dokumentacji
     const data = await Backend.courseSessionAttendanceListGet(Number(sessionId));
     attendanceList.value = data;
   } catch (err) {

@@ -1,8 +1,9 @@
 <template>
   <div>
-    <header>
+    <header class="p-2">
       <span>AttendMe - Student</span>
-      <button @click="logout">Wyloguj</button>
+      <button @click="logout" class="btn btn-primary">Wyloguj</button>
+      <!-- <button @click="registerDevice" class="btn btn-primary">Zarejestruj urządzenie</button> -->
     </header>
 
     <main>
@@ -26,10 +27,13 @@ import { useRouter } from "vue-router";
 import { Backend } from "@/main";
 import SessionsList from "@/components/SessionsList.vue"; // Import komponentu
 
+// const route = useRoute();
 const router = useRouter();
 const sessions = ref<any[]>([]);
 const loading = ref(true);
 const error = ref("");
+// const token = (route.params.token as string) || ""; // Pobierz token z parametrów trasy
+// const token = (route.params.token as string) || "123"; // Pobierz token z parametrów trasy
 
 const fetchSessions = async () => {
   try {
