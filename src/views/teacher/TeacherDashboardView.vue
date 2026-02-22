@@ -1,50 +1,69 @@
 <template>
   <div>
-    <header class="p-2">
-      <span>AttendMe - Teacher</span>
-      <button @click="logout" class="btn btn-primary">Wyloguj</button>
-      <!-- <button @click="registerDevice" class="btn btn-primary">Zarejestruj urządzenie</button> -->
+    <header class="p-2 border-bottom d-flex justify-content-between align-items-center">
+      <span>AttendMe - {{ userRole }}</span>
+      <div class="buttons">
+        <button @click="logout" class="btn btn-danger btn-sm">Wyloguj</button>
+      </div>
     </header>
 
-    <section class="filters-container">
-      <div class="search-bar">
-        <label>Wyszukaj (przedmiot, lokalizacja):</label>
-        <input
-          v-model="filters.searchText"
-          type="text"
-          placeholder="Np. Programowanie, Sala 101"
-          @input="fetchSessions"
-        />
-      </div>
+    <main class="p-3">
+      <section class="filters-container mb-4 p-3 bg-light rounded shadow-sm">
+        <div class="row g-3">
+          <div class="col-md-12">
+            <label class="form-label fw-bold">Wyszukaj (przedmiot, lokalizacja):</label>
+            <input
+              v-model="filters.searchText"
+              type="text"
+              class="form-control"
+              placeholder="Np. Programowanie, Sala 101"
+              @input="fetchSessions"
+            />
+          </div>
 
-      <div class="date-presets">
-        <label>Zakres czasu:</label>
-        <div class="button-group">
-          <button :class="{ active: activePreset === 'today' }" @click="setPreset('today')">
-            Dziś
-          </button>
-          <button :class="{ active: activePreset === 'tomorrow' }" @click="setPreset('tomorrow')">
-            Jutro
-          </button>
-          <button :class="{ active: activePreset === 'nextWeek' }" @click="setPreset('nextWeek')">
-            Następny tydzień
-          </button>
-          <button :class="{ active: activePreset === 'past' }" @click="setPreset('past')">
-            Minione
-          </button>
-          <button :class="{ active: activePreset === 'all' }" @click="setPreset('all')">
-            Wszystkie
-          </button>
+          <div class="col-md-12">
+            <label class="form-label fw-bold d-block">Szybki wybór:</label>
+            <div class="btn-group btn-group-sm w-100" role="group">
+              <button
+                v-for="preset in presets"
+                :key="preset.id"
+                class="btn btn-outline-primary"
+                :class="{ active: activePreset === preset.id }"
+                @click="setPreset(preset.id)"
+              >
+                {{ preset.label }}
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Data od:</label>
+            <input
+              v-model="manualDates.from"
+              type="date"
+              class="form-control"
+              @change="handleManualDateChange"
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Data do:</label>
+            <input
+              v-model="manualDates.to"
+              type="date"
+              class="form-control"
+              @change="handleManualDateChange"
+            />
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <SessionsList
-      :sessions="sessions"
-      :loading="loading"
-      actionLabel="Otwórz listę obecności"
-      @action="handleDetails"
-    />
+      <SessionsList
+        :sessions="sessions"
+        :loading="loading"
+        :actionLabel="userRole === 'Teacher' ? 'Otwórz listę' : 'Szczegóły'"
+        @action="handleAction"
+      />
+    </main>
   </div>
 </template>
 
@@ -55,9 +74,16 @@ import { Backend } from "@/main";
 import SessionsList from "@/components/SessionsList.vue";
 
 const router = useRouter();
+const userRole = sessionStorage.getItem("userRole");
 const sessions = ref<any[]>([]);
 const loading = ref(true);
 const activePreset = ref("all");
+
+// Model dla ręcznego wyboru dat
+const manualDates = reactive({
+  from: "",
+  to: "",
+});
 
 const filters = reactive({
   searchText: "",
@@ -65,33 +91,54 @@ const filters = reactive({
   dateTo: undefined as Date | undefined,
 });
 
+const presets = [
+  { id: "today", label: "Dziś" },
+  { id: "tomorrow", label: "Jutro" },
+  { id: "nextWeek", label: "Następny tydzień" },
+  { id: "past", label: "Minione" },
+  { id: "all", label: "Wszystkie" },
+];
+
+// Obsługa ręcznej zmiany daty
+const handleManualDateChange = () => {
+  activePreset.value = "custom"; // Odznaczamy presety
+  filters.dateFrom = manualDates.from ? new Date(manualDates.from) : undefined;
+  if (filters.dateFrom) filters.dateFrom.setHours(0, 0, 0, 0);
+
+  filters.dateTo = manualDates.to ? new Date(manualDates.to) : undefined;
+  if (filters.dateTo) filters.dateTo.setHours(23, 59, 59, 999);
+
+  fetchSessions();
+};
+
 const setPreset = (preset: string) => {
   activePreset.value = preset;
+  manualDates.from = ""; // Czyścimy ręczny wybór
+  manualDates.to = "";
+
   const now = new Date();
-  now.setHours(0, 0, 0, 0);
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
 
   switch (preset) {
     case "today":
-      filters.dateFrom = new Date(now);
-      filters.dateTo = new Date(now);
+      filters.dateFrom = startOfToday;
+      filters.dateTo = new Date(startOfToday);
       filters.dateTo.setHours(23, 59, 59, 999);
       break;
     case "tomorrow":
-      const tomorrow = new Date(now);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      filters.dateFrom = new Date(tomorrow);
-      filters.dateTo = new Date(tomorrow);
+      filters.dateFrom = new Date(startOfToday);
+      filters.dateFrom.setDate(filters.dateFrom.getDate() + 1);
+      filters.dateTo = new Date(filters.dateFrom);
       filters.dateTo.setHours(23, 59, 59, 999);
       break;
     case "nextWeek":
-      filters.dateFrom = new Date(now);
-      filters.dateTo = new Date(now);
-      filters.dateTo.setDate(now.getDate() + 7);
+      filters.dateFrom = startOfToday;
+      filters.dateTo = new Date(startOfToday);
+      filters.dateTo.setDate(filters.dateTo.getDate() + 7);
       break;
     case "past":
-      filters.dateFrom = new Date(2020, 0, 1); // Dowolna data z przeszłości
-      filters.dateTo = new Date(now);
-      filters.dateTo.setSeconds(now.getSeconds() - 1);
+      filters.dateFrom = new Date(2020, 0, 1);
+      filters.dateTo = new Date(now.getTime() - 1);
       break;
     case "all":
     default:
@@ -105,29 +152,43 @@ const setPreset = (preset: string) => {
 const fetchSessions = async () => {
   try {
     loading.value = true;
-    // Wywołanie metody POST /course/teacher/sessions/get z filtrami
-    const response = await Backend.courseTeacherSessionsGet({
+
+    // Budujemy obiekt zgodnie z przesłanym schematem JSON
+    const requestBody = {
       pageNumber: 1,
       pageSize: 100,
       filters: {
         search: filters.searchText || undefined,
-        dateStart: filters.dateFrom ? new Date(filters.dateFrom) : undefined,
-        dateEnd: filters.dateTo ? new Date(filters.dateTo) : undefined,
+        // Backend oczekuje dateStart i dateEnd wewnątrz obiektu filters
+        dateStart: filters.dateFrom ? filters.dateFrom.toISOString() : undefined,
+        dateEnd: filters.dateTo ? filters.dateTo.toISOString() : undefined,
+        // Możesz dodać te pola, jeśli masz je w UI:
+        courseName: undefined,
+        courseGroupName: undefined,
+        locationName: undefined,
       },
-    });
+      sortBy: "dateStart", // Opcjonalne sortowanie
+    };
+
+    let response;
+    if (userRole === "Teacher") {
+      response = await Backend.courseTeacherSessionsGet(requestBody);
+    } else {
+      response = await Backend.courseStudentSessionsGet(requestBody);
+    }
+
     sessions.value = response.items || [];
   } catch (err) {
-    console.error("Błąd pobierania:", err);
+    console.error("Błąd API (sprawdź Network tab):", err);
+    error.value = "Nie udało się pobrać zajęć.";
   } finally {
     loading.value = false;
   }
 };
 
-const resetFilters = () => {
-  filterParams.searchText = "";
-  filterParams.dateFrom = "";
-  filterParams.dateTo = "";
-  fetchSessions();
+const handleAction = (id: number) => {
+  const path = userRole === "Teacher" ? `/teacher/session/${id}` : `/student/session/${id}`;
+  router.push(path);
 };
 
 const logout = () => {
@@ -135,13 +196,6 @@ const logout = () => {
   sessionStorage.clear();
   router.push("/login");
 };
-
-const registerDevice = () => {
-  // Przekierowanie do widoku rejestracji urządzenia
-  router.push("/device-registration");
-};
-
-const handleDetails = (id: number) => router.push(`/teacher/session/${id}`);
 
 onMounted(fetchSessions);
 </script>
