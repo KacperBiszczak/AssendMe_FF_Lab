@@ -12,26 +12,33 @@
     <hr />
 
     <section>
-      <h2>Lista obecności</h2>
-      <button @click="goToScanner">Uruchom skanowanie (QR)</button>
-      <button @click="fetchAttendance" :disabled="loading">Odśwież listę</button>
+      <h2 class="text-center">Lista obecności</h2>
+      <menu>
+        <button class="btn btn-primary m-1 mb-2" @click="goToScanner">
+          Uruchom skanowanie (QR)
+        </button>
+        <button class="btn btn-primary m-1 mb-2" @click="fetchAttendance" :disabled="loading">
+          Odśwież listę
+        </button>
+      </menu>
 
       <div v-if="loading">Ładowanie listy studentów...</div>
 
-      <table v-else border="1">
+      <table class="table table-striped" v-else border="1">
         <thead>
           <tr>
-            <th>Imię i Nazwisko</th>
-            <th>Nr indeksu</th>
-            <th>Status</th>
+            <th scope="col">Imię i Nazwisko</th>
+            <th scope="col">Nr indeksu</th>
+            <th scope="col">Status</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="table-group-divider">
           <tr v-for="student in attendanceList" :key="student.studentId">
             <td>{{ student.userName }} {{ student.userSurname }}</td>
             <td>{{ student.attenderUserId }}</td>
             <td>
-              <span>{{ student.isPresent ? "Obecny" : "Nieobecny" }}</span>
+              <span v-if="student.wasUserPresent" class="badge bg-success">Obecny</span>
+              <span v-else class="badge bg-danger">Nieobecny</span>
             </td>
           </tr>
         </tbody>
