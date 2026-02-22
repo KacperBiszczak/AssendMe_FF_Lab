@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-100">
     <header class="p-2 border-bottom d-flex justify-content-between align-items-center">
       <span>AttendMe - Student</span>
       <div class="buttons">
@@ -158,7 +158,6 @@ const fetchSessions = async () => {
     loading.value = true;
     error.value = "";
 
-    // Budujemy obiekt zgodnie z Twoim schematem JSON
     const requestBody = {
       pageNumber: 1,
       pageSize: 100,
@@ -176,7 +175,6 @@ const fetchSessions = async () => {
     // Wywołanie specyficzne dla Studenta
     const response = await Backend.courseStudentSessionsGet(requestBody);
     sessions.value = response.items || [];
-    console.log("Pobrane zajęcia studenta:", sessions.value);
   } catch (err) {
     console.error("Błąd API (Student):", err);
     error.value = "Błąd pobierania danych.";

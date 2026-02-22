@@ -2,15 +2,27 @@
   <main class="login-container">
     <h2>AttendMe - Logowanie</h2>
     <form @submit.prevent="handleLogin">
-      <div class="form-group">
-        <label>Login:</label>
-        <input v-model="loginData.loginName" type="text" required />
+      <div class="form-group mt-2">
+        <label for="loginInput">Login</label>
+        <input
+          class="form-control"
+          v-model="loginData.loginName"
+          id="loginInput"
+          type="text"
+          required
+        />
       </div>
-      <div class="form-group">
-        <label>Hasło:</label>
-        <input v-model="loginData.password" type="password" required />
+      <div class="form-group mt-2">
+        <label for="passwordInput">Hasło</label>
+        <input
+          class="form-control"
+          v-model="loginData.password"
+          id="passwordInput"
+          type="password"
+          required
+        />
       </div>
-      <button type="submit" :disabled="loading">
+      <button class="btn btn-primary btn-lg btn-block mt-2 w-100" type="submit" :disabled="loading">
         {{ loading ? "Logowanie..." : "Zaloguj się" }}
       </button>
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
