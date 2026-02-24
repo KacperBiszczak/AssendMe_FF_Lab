@@ -17,13 +17,6 @@
           :foreground="'#000000'"
           :render-as="'svg'"
           :margin="0"
-          :image-settings="{
-            src: 'https://github.com/scopewu.png',
-            width: 30,
-            height: 30,
-            excavate: true,
-            borderRadius: 0,
-          }"
         />
 
         <p>Kod odświeża się co 2 sekundy</p>
