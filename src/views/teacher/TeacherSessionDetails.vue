@@ -65,7 +65,7 @@ const sessionInfo = ref<CourseSessionListItem | null>(null);
 const attendanceList = ref<CourseSessionAttendanceRecord[]>([]);
 const loading = ref(true);
 let refreshInterval: number | null = null;
-console.log(attendanceList);
+// console.log(attendanceList);
 // 1. Pobieranie danych o samej sesji (szczegóły)
 const fetchSessionInfo = async () => {
   try {

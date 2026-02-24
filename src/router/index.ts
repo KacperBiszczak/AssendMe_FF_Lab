@@ -4,8 +4,10 @@ import TestView from "../views/TestView.vue";
 import StudentDashboardView from "../views/student/StudentDashboardView.vue";
 import TeacherDashboardView from "../views/teacher/TeacherDashboardView.vue";
 import TeacherSessionDetails from "../views/teacher/TeacherSessionDetails.vue";
-import StudentAttendance from "@/views/student/StudentAttendance.vue";
+import DeviceRegister from "@/views/student/DeviceRegister.vue";
 import TeacherScan from "@/views/teacher/TeacherScan.vue";
+import StudentSessionDetailsView from "@/views/student/StudentSessionDetailsView.vue";
+import StudentAttendanceView from "@/views/student/StudentAttendanceView.vue";
 // import { routes } from "vue-router/auto-routes";
 
 const router = createRouter({
@@ -35,9 +37,15 @@ const router = createRouter({
       meta: { requiresAuth: true, role: "Student" },
     },
     {
+      path: "/student/session/:id",
+      name: "student-session-details",
+      component: StudentSessionDetailsView,
+      meta: { requiresAuth: true, role: "Student" },
+    },
+    {
       path: "/student/attendance/:id",
-      name: "student-attendance",
-      component: StudentAttendance,
+      name: "student-attendance-details",
+      component: StudentAttendanceView,
       meta: { requiresAuth: true, role: "Student" },
     },
 
@@ -59,6 +67,11 @@ const router = createRouter({
       name: "teacher-scan",
       component: TeacherScan,
       meta: { requiresAuth: true, role: "Teacher" },
+    },
+    {
+      path: "/device/register/:token",
+      name: "DeviceRegister",
+      component: DeviceRegister,
     },
     {
       path: "/about",

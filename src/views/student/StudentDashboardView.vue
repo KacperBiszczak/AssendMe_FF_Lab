@@ -62,8 +62,11 @@
       <SessionsList
         :sessions="sessions"
         :loading="loading"
-        actionLabel="Zgłoś obecność"
-        @action="handleAttendance"
+        actionLabelDetails="Szczegóły"
+        actionLabelAttendance="Zgłoś obecność"
+        @actionLabelDetails="handleActionDetails"
+        @actionLabelAttendance="handleAttendance"
+        @actionLabelRegisterDevice="handleRegisterDevice"
       />
 
       <p v-if="error" class="text-danger mt-3">{{ error }}</p>
@@ -183,8 +186,21 @@ const fetchSessions = async () => {
   }
 };
 
-const handleAttendance = (id: number) => {
-  router.push(`/student/attendance/${id}`);
+const handleActionDetails = (id: number) => {
+  const path = `/student/session/${id}`;
+  router.push(path);
+};
+
+const handleRegisterDevice = (token: string) => {
+  if (token) {
+    router.push(`/device/register/${token}`);
+  } else {
+    alert("Brak tokenu do rejestracji urządzenia.");
+  }
+};
+
+const handleAttendance = () => {
+  router.push(`/device/register/`);
 };
 
 const logout = () => {

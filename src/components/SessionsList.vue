@@ -23,8 +23,19 @@
             <li>Sala: {{ session.locationName || "Brak danych" }}</li>
           </ul>
 
-          <button @click="$emit('action', session.courseSessionId)" class="btn btn-primary">
-            {{ actionLabel }}
+          <button
+            @click="$emit('actionLabelDetails', session.courseSessionId)"
+            class="btn btn-primary"
+          >
+            {{ actionLabelDetails }}
+          </button>
+
+          <button
+            v-if="userRole == 'Student'"
+            @click="$emit('actionLabelAttendance', session.attendanceToken)"
+            class="btn btn-primary"
+          >
+            {{ actionLabelAttendance }}
           </button>
         </div>
       </div>
@@ -39,7 +50,11 @@ const userRole = sessionStorage.getItem("userRole") || "";
 defineProps<{
   sessions: any[];
   loading: boolean;
-  actionLabel: string;
+  actionLabelDetails: string;
+  actionLabelAttendance: string;
+  handleActionDetails: (id: number) => void;
+  handleAttendance?: (token: string) => void;
+  handleRegisterDevice?: (token: string) => void;
 }>();
 
 // Definicja zdarzeń (emits)

@@ -60,7 +60,8 @@
       <SessionsList
         :sessions="sessions"
         :loading="loading"
-        :actionLabel="userRole === 'Teacher' ? 'Otwórz listę' : 'Szczegóły'"
+        :actionLabelDetails="'Otwórz listę'"
+        :actionLabelAttendance="''"
         @action="handleAction"
       />
     </main>
@@ -187,7 +188,7 @@ const fetchSessions = async () => {
 };
 
 const handleAction = (id: number) => {
-  const path = userRole === "Teacher" ? `/teacher/session/${id}` : `/student/session/${id}`;
+  const path = `/teacher/session/${id}`;
   router.push(path);
 };
 
