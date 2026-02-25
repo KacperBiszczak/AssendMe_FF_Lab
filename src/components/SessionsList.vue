@@ -24,7 +24,7 @@
           </ul>
 
           <button
-            @click="$emit('actionLabelDetails', session.courseSessionId)"
+            @click="$emit('ActionLabelDetails', session.courseSessionId)"
             class="btn btn-primary"
           >
             {{ actionLabelDetails }}
@@ -58,7 +58,7 @@ defineProps<{
 }>();
 
 // Definicja zdarzeń (emits)
-defineEmits(["action"]);
+defineEmits(["ActionLabelDetails", "actionLabelAttendance"]);
 
 const formatDate = (dateString: string | Date | undefined | null): string => {
   if (!dateString) return "";

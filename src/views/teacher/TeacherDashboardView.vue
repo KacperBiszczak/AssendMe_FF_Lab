@@ -62,7 +62,7 @@
         :loading="loading"
         :actionLabelDetails="'Otwórz listę'"
         :actionLabelAttendance="''"
-        @action="handleAction"
+        @actionLabelDetails="handleAction"
       />
     </main>
   </div>
@@ -188,6 +188,7 @@ const fetchSessions = async () => {
 };
 
 const handleAction = (id: number) => {
+  console.log("Wybrano sesję o ID:", id);
   const path = `/teacher/session/${id}`;
   router.push(path);
 };
