@@ -31,7 +31,7 @@
           </button>
 
           <button
-            v-if="userRole == 'Student'"
+            v-if="userRole == 'Admin'"
             @click="$emit('actionLabelAttendance', session.attendanceToken)"
             class="btn btn-primary"
           >

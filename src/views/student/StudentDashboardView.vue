@@ -56,6 +56,15 @@
               @change="handleManualDateChange"
             />
           </div>
+
+          <div>
+            <button class="btn btn-secondary mt-3" @click="handleAttendance">Zgłoś obecność</button>
+          </div>
+          <div>
+            <button class="btn btn-secondary mt-3" @click="handleRegisterDevice">
+              Zarejestruj urządzenie
+            </button>
+          </div>
         </div>
       </section>
 
@@ -200,7 +209,7 @@ const handleRegisterDevice = (token: string) => {
 };
 
 const handleAttendance = () => {
-  router.push(`/device/register/`);
+  router.push(`/student/attendance/`);
 };
 
 const logout = () => {

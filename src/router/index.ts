@@ -43,7 +43,7 @@ const router = createRouter({
       meta: { requiresAuth: true, role: "Student" },
     },
     {
-      path: "/student/attendance/:id",
+      path: "/student/attendance/",
       name: "student-attendance-details",
       component: StudentAttendanceView,
       meta: { requiresAuth: true, role: "Student" },
