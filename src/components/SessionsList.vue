@@ -23,10 +23,7 @@
             <li>Sala: {{ session.locationName || "Brak danych" }}</li>
           </ul>
 
-          <button
-            @click="$emit('ActionLabelDetails', session.courseSessionId)"
-            class="btn btn-primary"
-          >
+          <button @click="$emit('actionDetails', session.courseSessionId)" class="btn btn-primary">
             {{ actionLabelDetails }}
           </button>
         </div>
@@ -36,21 +33,20 @@
 </template>
 
 <script setup lang="ts">
-const userRole = sessionStorage.getItem("userRole") || "";
+import type { CourseSession } from "@/backend/AttendMeBackendClientBase";
 
 // Definicja właściwości wejściowych (props)
 defineProps<{
-  sessions: any[];
+  sessions: CourseSession[];
   loading: boolean;
   actionLabelDetails: string;
   actionLabelAttendance: string;
-  handleActionDetails: (id: number) => void;
   handleAttendance?: (token: string) => void;
   handleRegisterDevice?: (token: string) => void;
 }>();
 
 // Definicja zdarzeń (emits)
-defineEmits(["ActionLabelDetails", "actionLabelAttendance"]);
+defineEmits(["actionDetails", "actionLabelAttendance"]);
 
 const formatDate = (dateString: string | Date | undefined | null): string => {
   if (!dateString) return "";

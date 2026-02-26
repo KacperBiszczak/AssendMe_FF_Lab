@@ -62,7 +62,7 @@
         :loading="loading"
         :actionLabelDetails="'Otwórz listę'"
         :actionLabelAttendance="''"
-        @actionLabelDetails="handleAction"
+        @actionDetails="handleActionDetails"
       />
     </main>
   </div>
@@ -73,10 +73,11 @@ import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { Backend } from "@/main";
 import SessionsList from "@/components/SessionsList.vue";
+import type { CourseSession } from "@/backend/AttendMeBackendClientBase";
 
 const router = useRouter();
 const userRole = sessionStorage.getItem("userRole");
-const sessions = ref<any[]>([]);
+const sessions = ref<CourseSession[]>([]);
 const loading = ref(true);
 const activePreset = ref("all");
 
@@ -161,8 +162,8 @@ const fetchSessions = async () => {
       filters: {
         search: filters.searchText || undefined,
         // Backend oczekuje dateStart i dateEnd wewnątrz obiektu filters
-        dateStart: filters.dateFrom ? filters.dateFrom.toISOString() : undefined,
-        dateEnd: filters.dateTo ? filters.dateTo.toISOString() : undefined,
+        dateStart: filters.dateFrom,
+        dateEnd: filters.dateTo,
         // Możesz dodać te pola, jeśli masz je w UI:
         courseName: undefined,
         courseGroupName: undefined,
@@ -181,14 +182,14 @@ const fetchSessions = async () => {
     sessions.value = response.items || [];
   } catch (err) {
     console.error("Błąd API (sprawdź Network tab):", err);
-    error.value = "Nie udało się pobrać zajęć.";
+    const errorMessage = err instanceof Error ? err.message : "Nie udało się pobrać zajęć.";
+    console.error(errorMessage);
   } finally {
     loading.value = false;
   }
 };
 
-const handleAction = (id: number) => {
-  console.log("Wybrano sesję o ID:", id);
+const handleActionDetails = (id: number) => {
   const path = `/teacher/session/${id}`;
   router.push(path);
 };

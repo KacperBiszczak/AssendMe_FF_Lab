@@ -78,18 +78,14 @@ const fetchSessionDetails = async () => {
     });
 
     const found = data.items?.find((s: any) => s.courseSessionId === sessionId);
-    console.log("Znalezione dane sesjis:", found?.courseGroupId);
     const courseGroupId = found?.courseGroupId;
 
     // Pobi
     const groupSessions = await Backend.courseStudentGroupSessionsGet(courseGroupId);
-    console.log("Sesje tego samego przedmiotu:", groupSessions);
     const completedSessions = groupSessions.filter((s: any) => s.dateEnd < new Date());
-    console.log("Liczba zakończonych sesji tego samego przedmiotu:", completedSessions);
 
     // Pobieranie obecności przedmiotu dla danego studenta
     const attendanceData = await Backend.courseStudentAttendanceGet(courseGroupId);
-    console.log("Sesje tego samego przedmiotu:", attendanceData.length);
 
     if (found) {
       sessionInfo.value = found;
@@ -104,8 +100,6 @@ const fetchSessionDetails = async () => {
       attendanceStats.total = courseSessions.length;
       attendanceStats.attended = attendanceData.length;
       attendanceStats.ended = completedSessions.length;
-
-      console.log("Statystyki obecności:", attendanceStats);
     }
   } catch (err) {
     console.error("Błąd pobierania statystyk:", err);
@@ -118,7 +112,6 @@ onMounted(fetchSessionDetails);
 </script>
 
 <style scoped>
-/* Stylizacja paska progress dla różnych przeglądarek */
 progress {
   appearance: none;
   width: 100%;

@@ -49,15 +49,13 @@ const handleLogin = async () => {
   errorMessage.value = "";
 
   try {
-    const authResult = await Backend.userLogin(loginData.loginName, loginData.password);
+    await Backend.userLogin(loginData.loginName, loginData.password);
 
     // if (authResult && authResult.token) {
     //   localStorage.setItem("jwt_token", authResult.token);
     // }
 
     const user = await Backend.userGet(undefined);
-
-    // console.log("Zalogowany użytkownik:", user);
 
     // Przekierowanie na podstawie roli
     if (user.isTeacher === true) {

@@ -46,11 +46,9 @@ const fetchTicket = async () => {
 
     // Jeśli backend zwraca obiekt, wyciągnij string (np. response.token)
     qrValue.value = typeof response === "string" ? response : response.token;
-    console.log("QR Value:", qrValue.value);
     error.value = "";
   } catch (err) {
     error.value = "Nie udało się pobrać kodu QR.";
-    console.error(err);
   } finally {
     loading.value = false;
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="w-100">
     <header class="p-2 border-bottom d-flex justify-content-between align-items-center">
-      <span>AttendMe - Student</span>
+      <span class="btn btn-success disabled">{{ userName }}</span>
       <div class="buttons">
         <button @click="logout" class="btn btn-danger btn-sm">Wyloguj</button>
       </div>
@@ -77,7 +77,7 @@
         :loading="loading"
         actionLabelDetails="Szczegóły"
         actionLabelAttendance="Zgłoś obecność"
-        @actionLabelDetails="handleActionDetails"
+        @actionDetails="handleActionDetails"
         @actionLabelAttendance="handleAttendance"
         @actionLabelRegisterDevice="handleRegisterDevice"
       />
@@ -98,6 +98,7 @@ const sessions = ref<any[]>([]);
 const loading = ref(true);
 const error = ref("");
 const activePreset = ref("all");
+const userName = ref("");
 
 // Model dla ręcznego wyboru dat
 const manualDates = reactive({
@@ -169,7 +170,18 @@ const setPreset = (preset: string) => {
   fetchSessions();
 };
 
+const fetchUserName = async () => {
+  try {
+    const response = await Backend.userGet(undefined);
+    userName.value = response.name || "Student";
+  } catch (err) {
+    userName.value = "Student";
+  }
+};
+
 const fetchSessions = async () => {
+  fetchUserName();
+
   try {
     loading.value = true;
     error.value = "";
@@ -192,7 +204,6 @@ const fetchSessions = async () => {
     const response = await Backend.courseStudentSessionsGet(requestBody);
     sessions.value = response.items || [];
   } catch (err) {
-    console.error("Błąd API (Student):", err);
     error.value = "Błąd pobierania danych.";
   } finally {
     loading.value = false;

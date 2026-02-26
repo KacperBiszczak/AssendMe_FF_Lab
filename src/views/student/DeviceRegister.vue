@@ -94,9 +94,7 @@ const registerDevice = async () => {
       studentSurname: registerDeviceData.studentSurname,
       albumIdNumber: registerDeviceData.albumIdNumber,
     });
-    console.log("Pobrany token:", result);
     ticketToken.value = result.token;
-    console.log("Pobrany token (ticket):", ticketToken.value);
     localStorage.setItem("deviceToken", ticketToken.value as string);
     alert("Urządzenie zarejestrowane! Możesz teraz zgłaszać obecność na zajęciach.");
     router.push("/student/dashboard");
