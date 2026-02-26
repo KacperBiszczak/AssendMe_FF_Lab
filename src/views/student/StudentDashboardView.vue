@@ -100,7 +100,6 @@ const error = ref("");
 const activePreset = ref("all");
 const userName = ref("");
 
-// Model dla ręcznego wyboru dat
 const manualDates = reactive({
   from: "",
   to: "",
@@ -120,7 +119,6 @@ const presets = [
   { id: "all", label: "Wszystkie" },
 ];
 
-// Obsługa ręcznej zmiany daty
 const handleManualDateChange = () => {
   activePreset.value = "custom";
   filters.dateFrom = manualDates.from ? new Date(manualDates.from) : undefined;
@@ -176,6 +174,7 @@ const fetchUserName = async () => {
     userName.value = response.name || "Student";
   } catch (err) {
     userName.value = "Student";
+    console.error("Błąd pobierania danych użytkownika:", err);
   }
 };
 
@@ -200,11 +199,11 @@ const fetchSessions = async () => {
       sortBy: "dateStart",
     };
 
-    // Wywołanie specyficzne dla Studenta
     const response = await Backend.courseStudentSessionsGet(requestBody);
     sessions.value = response.items || [];
   } catch (err) {
     error.value = "Błąd pobierania danych.";
+    console.error("Błąd API (sprawdź Network tab):", err);
   } finally {
     loading.value = false;
   }

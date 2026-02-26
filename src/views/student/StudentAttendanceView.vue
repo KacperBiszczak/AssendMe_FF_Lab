@@ -41,10 +41,8 @@ let timer: ReturnType<typeof setInterval> | null = null;
 
 const fetchTicket = async () => {
   try {
-    // Zakładamy, że funkcja zwraca Promise<string> lub obiekt z tokenem
     const response = await Backend.userAttendanceTicketGet();
 
-    // Jeśli backend zwraca obiekt, wyciągnij string (np. response.token)
     qrValue.value = typeof response === "string" ? response : response.token;
     error.value = "";
   } catch (err) {
@@ -55,15 +53,12 @@ const fetchTicket = async () => {
 };
 
 onMounted(() => {
-  // Pierwsze pobranie
   fetchTicket();
 
-  // Ustawienie interwału odświeżania co 2 sekundy
   timer = setInterval(fetchTicket, 2000);
 });
 
 onUnmounted(() => {
-  // Sprzątanie - zatrzymanie licznika po wyjściu z komponentu
   if (timer) clearInterval(timer);
 });
 </script>

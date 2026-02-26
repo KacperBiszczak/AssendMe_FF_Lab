@@ -19,7 +19,7 @@
 
           <ul>
             <li>Grupa: {{ session.courseGroupName }}</li>
-            <li>Termin: {{ formatDate(session.dateStart) }}</li>
+            <li>Termin: {{ session.dateStart?.toLocaleTimeString("pl-PL") }}</li>
             <li>Sala: {{ session.locationName || "Brak danych" }}</li>
           </ul>
 
@@ -33,11 +33,11 @@
 </template>
 
 <script setup lang="ts">
-import type { CourseSession } from "@/backend/AttendMeBackendClientBase";
+import type { CourseSessionListItem } from "@/backend/AttendMeBackendClientBase";
 
 // Definicja właściwości wejściowych (props)
 defineProps<{
-  sessions: CourseSession[];
+  sessions: CourseSessionListItem[];
   loading: boolean;
   actionLabelDetails: string;
   actionLabelAttendance: string;
@@ -47,10 +47,4 @@ defineProps<{
 
 // Definicja zdarzeń (emits)
 defineEmits(["actionDetails", "actionLabelAttendance"]);
-
-const formatDate = (dateString: string | Date | undefined | null): string => {
-  if (!dateString) return "";
-  const date = new Date(dateString);
-  return date.toLocaleString("pl-PL");
-};
 </script>

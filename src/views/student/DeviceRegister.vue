@@ -64,12 +64,9 @@ const route = useRoute();
 
 const token = ref<string>(route.params.token as string);
 
-const sessionInfo = ref<any>(null);
 const ticketToken = ref<string | undefined>("");
-// const attendanceMessage = ref<string>("");
 const loading = ref(true);
 const error = ref("");
-const intervalId: any = null;
 
 const registerDeviceData = reactive({
   deviceName: "",
@@ -77,17 +74,10 @@ const registerDeviceData = reactive({
   studentSurname: "",
   albumIdNumber: 0,
 });
-/**
- * 2. Pobieranie dynamicznego biletu (QR)
- * Wymaga wcześniejszej rejestracji urządzenia
- */
 
 const registerDevice = async () => {
   try {
-    // if (ticketToken.value != "") {
-    //   router.push("/student/dashboard");
-    // }
-    // Metoda zwracająca token (ticket) do wyświetlenia jako QR
+    // QR code
     const result = await Backend.userDeviceRegisterWithToken(token.value, {
       deviceName: registerDeviceData.deviceName,
       studentName: registerDeviceData.studentName,
@@ -99,12 +89,7 @@ const registerDevice = async () => {
     alert("Urządzenie zarejestrowane! Możesz teraz zgłaszać obecność na zajęciach.");
     router.push("/student/dashboard");
 
-    // Jeśli backend zwróci informację o ostatnio zarejestrowanej obecności
-    // if (result.lastAttendanceMessage) {
-    //   attendanceMessage.value = result.lastAttendanceMessage;
-    // }
   } catch (err) {
-    // Jeśli urządzenie nie jest zarejestrowane, tutaj może wystąpić błąd autoryzacji
     error.value = "Problem z rejestracją urządzenia. Sprawdź czy token jest poprawny.";
   } finally {
     loading.value = false;

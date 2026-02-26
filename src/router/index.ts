@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import LoginView from "../views/LoginView.vue";
-import TestView from "../views/TestView.vue";
 import StudentDashboardView from "../views/student/StudentDashboardView.vue";
 import TeacherDashboardView from "../views/teacher/TeacherDashboardView.vue";
 import TeacherSessionDetails from "../views/teacher/TeacherSessionDetails.vue";
@@ -72,14 +71,6 @@ const router = createRouter({
       path: "/device/register/:token",
       name: "DeviceRegister",
       component: DeviceRegister,
-    },
-    {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import("../views/AboutView.vue"),
     },
   ],
 });
