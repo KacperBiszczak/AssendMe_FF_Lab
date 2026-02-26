@@ -1,13 +1,13 @@
 <template>
   <div class="container p-3">
-    <button @click="$router.back()" class="btn btn-secondary mb-3">Wróć do listy</button>
+    <button @click="$router.back()" class="btn btn-secondary mb-3 w-100">Wróć do listy</button>
 
-    <section v-if="sessionInfo" class="card p-3 shadow-sm mb-3">
+    <section v-if="sessionInfo" class="card p-3 shadow-sm mb-1">
       <h1>{{ sessionInfo.courseName }}</h1>
       <p><strong>Grupa:</strong> {{ sessionInfo.courseGroupName }}</p>
       <p><strong>Sala:</strong> {{ sessionInfo.locationName || "Brak danych" }}</p>
 
-      <div class="attendance-progress mt-4 p-3 border rounded bg-white">
+      <div class="attendance-progress mt-2 p-3 border rounded bg-white">
         <label class="fw-bold mb-2 d-block">Twoja frekwencja na tym przedmiocie:</label>
 
         <div class="d-flex align-items-center gap-3">
@@ -21,7 +21,7 @@
           <span class="fw-bold"> {{ attendanceStats.attended }}/{{ attendanceStats.total }} </span>
         </div>
 
-        <label class="fw-bold mb-2 d-block">Zaawansowanie zajęć na tym przedmiocie:</label>
+        <label class="fw-bold mt-3 mb-1 d-block">Zaawansowanie zajęć na tym przedmiocie:</label>
 
         <div class="d-flex align-items-center gap-3">
           <progress
@@ -37,12 +37,12 @@
         <!-- <p class="small text-muted mt-2">Procentowa obecność: {{ calculatePercentage() }}%</p> -->
       </div>
 
-      <div class="mt-3 p-2 border rounded bg-light">
+      <!-- <div class="mt-3 p-2 border rounded bg-light">
         <strong>Status tych konkretnych zajęć:</strong>
         <span :class="sessionInfo.attendanceStatus === 'Obecny' ? 'text-success' : 'text-danger'">
           {{ sessionInfo.attendanceStatus || "Brak informacji" }}
         </span>
-      </div>
+      </div> -->
     </section>
 
     <div v-else-if="loading">Ładowanie danych...</div>
@@ -66,11 +66,6 @@ const attendanceStats = reactive({
   total: 0, // Ile zajęć odbyło się do tej pory
   ended: 0, // Ile zajęć już się odbyło (niezależnie od obecności)
 });
-
-const calculatePercentage = () => {
-  if (attendanceStats.total === 0) return 0;
-  return Math.round((attendanceStats.attended / attendanceStats.total) * 100);
-};
 
 const fetchSessionDetails = async () => {
   try {

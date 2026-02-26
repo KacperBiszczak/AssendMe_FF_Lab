@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="$router.back()">Wróć do listy</button>
+    <button class="btn btn-secondary w-100" @click="$router.back()">Wróć do listy</button>
 
     <hr />
 

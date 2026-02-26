@@ -1,7 +1,6 @@
 <template>
   <div>
-    <button @click="$router.back()">Powrót do listy</button>
-
+    <button class="my-3 btn btn-secondary w-100" @click="$router.back()">Powrót do listy</button>
     <section v-if="sessionInfo">
       <h1>{{ sessionInfo.courseName }}</h1>
       <p>Grupa: {{ sessionInfo.courseGroupName }}</p>
@@ -13,14 +12,12 @@
 
     <section>
       <h2 class="text-center">Lista obecności</h2>
-      <menu>
-        <button class="btn btn-primary m-1 mb-2" @click="goToScanner">
+      <!-- <button class="btn btn-primary m-1 mb-2" @click="goToScanner">
           Uruchom skanowanie (QR)
-        </button>
-        <button class="btn btn-primary m-1 mb-2" @click="fetchAttendance" :disabled="loading">
-          Odśwież listę
-        </button>
-      </menu>
+        </button> -->
+      <button class="btn btn-primary my-3 w-100" @click="fetchAttendance" :disabled="loading">
+        Odśwież listę
+      </button>
 
       <div v-if="loading">Ładowanie listy studentów...</div>
 

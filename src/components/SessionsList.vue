@@ -13,9 +13,9 @@
         <div class="card-body">
           <h3 class="card-title">{{ session.courseName }}</h3>
 
-          <div v-if="userRole == 'Student'" class="card-subtitle mb-2 text-muted">
+          <!-- <div v-if="userRole == 'Student'" class="card-subtitle mb-2 text-muted">
             Status: {{ session.attendanceStatus || "Oczekuje" }}
-          </div>
+          </div> -->
 
           <ul>
             <li>Grupa: {{ session.courseGroupName }}</li>
@@ -28,14 +28,6 @@
             class="btn btn-primary"
           >
             {{ actionLabelDetails }}
-          </button>
-
-          <button
-            v-if="userRole == 'Admin'"
-            @click="$emit('actionLabelAttendance', session.attendanceToken)"
-            class="btn btn-primary"
-          >
-            {{ actionLabelAttendance }}
           </button>
         </div>
       </div>

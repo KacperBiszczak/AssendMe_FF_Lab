@@ -51,9 +51,9 @@ const handleLogin = async () => {
   try {
     const authResult = await Backend.userLogin(loginData.loginName, loginData.password);
 
-    if (authResult && authResult.token) {
-      localStorage.setItem("jwt_token", authResult.token);
-    }
+    // if (authResult && authResult.token) {
+    //   localStorage.setItem("jwt_token", authResult.token);
+    // }
 
     const user = await Backend.userGet(undefined);
 

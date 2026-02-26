@@ -57,13 +57,17 @@
             />
           </div>
 
-          <div>
-            <button class="btn btn-secondary mt-3" @click="handleAttendance">Zgłoś obecność</button>
-          </div>
-          <div>
-            <button class="btn btn-secondary mt-3" @click="handleRegisterDevice">
-              Zarejestruj urządzenie
-            </button>
+          <div class="mx-auto mt-3 py-3 border rounded bg-light row">
+            <div class="col">
+              <button class="btn btn-primary w-100 p-3" @click="handleAttendance">
+                Zgłoś obecność
+              </button>
+            </div>
+            <div class="col">
+              <button class="btn btn-primary w-100 p-3" @click="handleRegisterDevice">
+                Zarejestruj urządzenie
+              </button>
+            </div>
           </div>
         </div>
       </section>
