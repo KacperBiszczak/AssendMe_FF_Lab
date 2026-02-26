@@ -19,7 +19,7 @@
 
           <ul>
             <li>Grupa: {{ session.courseGroupName }}</li>
-            <li>Termin: {{ session.dateStart?.toLocaleTimeString("pl-PL") }}</li>
+            <li>Termin: {{ session.dateStart?.toLocaleString("pl-PL") }}</li>
             <li>Sala: {{ session.locationName || "Brak danych" }}</li>
           </ul>
 
